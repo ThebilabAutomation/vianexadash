@@ -677,7 +677,7 @@
           <option value="Todos">Todos los destinos</option>
           <option value="Santiago">Santiago</option>
           <option value="Atacama">Desierto de Atacama</option>
-          <option value="Ski">Nieve (Valle Nevado, Portillo…)</option>
+          <option value="Ski">Experiencia con nieve</option>
           <option value="Torres del Paine">Torres del Paine</option>
           <option value="Valparaiso">Valparaíso</option>
           <option value="Vina del Mar">Viña del Mar</option>
@@ -776,6 +776,9 @@
           <div class="card-badge">volumen</div>
         </div>
         <div class="chart-wrap tall"><canvas id="chartDestinos"></canvas></div>
+        <div style="margin-top:10px;padding-top:10px;border-top:1px dashed var(--border);font-size:11px;color:var(--muted);line-height:1.5;">
+          <b style="color:var(--text);">Nota metodológica:</b> "Experiencia con nieve" agrega las 5 estaciones canónicas del briefing — <b>Valle Nevado, Portillo, Farellones, El Colorado y Nevados de Chillán</b> — más contenido genérico sobre nieve/invierno en el Chile central. "Genérico Chile" agrupa menciones al país sin destino específico.
+        </div>
       </div>
       <div class="card">
         <div class="card-header">
@@ -828,7 +831,7 @@
           <div class="driver-block">
             <div class="driver-tag neg">NEGATIVO</div>
             <div class="driver-text">
-              <b>Solo 53 textos (1,2%)</b> en toda la base PT-BR. Concentración en <b>Valparaíso (7% del destino), Ski (Farellones), Santiago centro</b>. Son <b>quejas específicas y accionables</b> — asalto, "no recomendo", "no vale la pena" — no clamor amplio. <b>El brasileño no está reclamando de Chile.</b>
+              <b>Solo 53 textos (1,2%)</b> en toda la base PT-BR. Concentración en <b>Valparaíso (7% del destino), Experiencia con nieve (Farellones), Santiago centro</b>. Son <b>quejas específicas y accionables</b> — asalto, "no recomendo", "no vale la pena" — no clamor amplio. <b>El brasileño no está reclamando de Chile.</b>
             </div>
           </div>
         </div>
@@ -1051,7 +1054,7 @@ function render() {
   charts.destinos = new Chart(document.getElementById('chartDestinos'), {
     type:'bar',
     data:{
-      labels: dLabels,
+      labels: dLabels.map(destLabel),
       datasets:[{
         data: dLabels.map(l=>d.by_destino[l]),
         backgroundColor: dLabels.map(l => l===currentDest ? COLORS.primary : COLORS.primaryLight),
@@ -1083,7 +1086,7 @@ function render() {
   charts.sentDest = new Chart(document.getElementById('chartSentDest'), {
     type:'bar',
     data:{
-      labels: sentDestKeys,
+      labels: sentDestKeys.map(destLabel),
       datasets:[
         {label:'Positivo', data:sPos, backgroundColor:COLORS.pos, stack:'s'},
         {label:'Neutro', data:sNeu, backgroundColor:COLORS.neu, stack:'s'},
@@ -1249,7 +1252,7 @@ function render() {
         <div class="mention-text">${escapeHtml(m.text)}</div>
         <div class="mention-foot">
           <span class="mention-stat">${engStr}</span>
-          <span>${m.destino}</span>
+          <span>${destLabel(m.destino)}</span>
         </div>
       </div>`;
   });
@@ -1261,7 +1264,7 @@ function escapeHtml(s) {
 
 function destLabel(k) {
   const map = {
-    'Santiago':'Santiago','Atacama':'Atacama','Ski':'Nieve',
+    'Santiago':'Santiago','Atacama':'Atacama','Ski':'Experiencia con nieve',
     'Torres del Paine':'Torres del Paine','Valparaiso':'Valparaíso',
     'Vina del Mar':'Viña del Mar','Pucon':'Pucón','Puerto Varas':'Puerto Varas',
     'Valle de Colchagua':'Valle de Colchagua','Isla de Pascua':'Isla de Pascua',
