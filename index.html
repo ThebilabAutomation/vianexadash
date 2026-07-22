@@ -732,6 +732,8 @@
           <div class="pop-title">Metodología · Sentimiento (v2)</div>
           <div class="pop-body">
             Clasificación en <b>dos capas</b>: (1) <b>LeIA</b>, léxico VADER adaptado a PT-BR, sobre los 4.260 textos PT-BR — score compound ≥ +0,05 = Positivo. (2) Los <b>532 textos NEG del LeIA fueron reclasificados individualmente por Claude LLM</b> con contexto de género turístico brasileño. Resultado: <b>90% eran falsos negativos</b> (ironía, hype en mayúscula, preguntas retóricas de precio) y migraron a POS o NEU. El valor mostrado usa <b>sentiment_final</b>, la versión consolidada.
+            <br><br>
+            <b style="color:#F5C88F;">Nota de escopo:</b> en esta ronda solo se reprocesaron los NEG del LeIA, no los NEU. El <b>30,5%</b> mostrado es un <b>piso</b> — la base positiva real es probablemente mayor, dado que hay textos hoy en NEU que deberían ser POS (preguntas retóricas de precio, hipérbole, "quanto gastei" con totales razonables).
           </div>
         </div>
       </div>
@@ -746,6 +748,8 @@
           <div class="pop-title">Metodología · Sentimiento (v2)</div>
           <div class="pop-body">
             LeIA original clasificó <b>12,5% de la base como NEG</b> — hallazgo posterior: <b>90% eran falsos negativos</b>. Los 532 textos fueron reclasificados por Claude LLM texto a texto y solo <b>53 (1,2% de la base PT-BR)</b> son quejas reales. Los 479 restantes eran: perguntas retóricas de precio con respuesta accesible (POS), hipérbole positiva ("no es de este planeta"), CAIXA ALTA de hype, ironía, o descripciones sensoriales neutras. La base negativa consolidada refleja <b>quejas explícitas</b>: asalto, "no recomendo", "no vale la pena".
+            <br><br>
+            <b style="color:#F5C88F;">Nota de escopo:</b> el <b>1,2%</b> mostrado es un <b>techo confiable</b> — todos los NEG del LeIA fueron auditados individualmente. La base negativa real es como máximo este valor; el número no está inflado.
           </div>
         </div>
       </div>
