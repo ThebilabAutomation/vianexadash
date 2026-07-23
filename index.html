@@ -551,6 +551,105 @@
     border-radius: 6px;
     margin-left: 10px;
   }
+  /* Metodología hover tooltip */
+  .method-item {
+    position: relative;
+  }
+  .method-tooltip {
+    position: fixed;
+    left: 244px;
+    bottom: 20px;
+    width: 640px;
+    background: #FFFFFF;
+    color: var(--text);
+    padding: 22px 26px;
+    border-radius: 14px;
+    box-shadow: 0 24px 60px rgba(15,18,30,0.35), 0 0 0 1px rgba(0,0,0,0.04);
+    font-size: 12.5px;
+    line-height: 1.55;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateX(-6px);
+    transition: opacity 0.15s, transform 0.15s, visibility 0s linear 0.15s;
+    z-index: 500;
+    pointer-events: none;
+  }
+  .method-item:hover .method-tooltip {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(0);
+    transition: opacity 0.15s, transform 0.15s, visibility 0s;
+    pointer-events: auto;
+  }
+  .method-tooltip::before {
+    content: '';
+    position: absolute;
+    left: -6px;
+    bottom: 32px;
+    width: 12px; height: 12px;
+    background: #FFFFFF;
+    transform: rotate(45deg);
+    box-shadow: -2px 2px 4px rgba(15,18,30,0.06);
+  }
+  .method-tt-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text);
+    letter-spacing: -0.01em;
+    margin-bottom: 6px;
+  }
+  .method-tt-sub {
+    color: var(--muted);
+    font-size: 11.5px;
+    margin-bottom: 16px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--border);
+    line-height: 1.5;
+  }
+  .method-tt-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px 22px;
+  }
+  .method-tt-h {
+    color: var(--primary);
+    font-weight: 700;
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .method-tt-b {
+    color: #374151;
+    font-size: 11.5px;
+    line-height: 1.5;
+  }
+  .method-tt-b b { color: var(--text); }
+  .method-tt-foot {
+    margin-top: 14px;
+    padding-top: 12px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    font-size: 11px;
+    color: var(--muted);
+    flex-wrap: wrap;
+  }
+  .method-tt-foot b { color: var(--text); }
+  .method-tt-badge {
+    background: #DCFCE7;
+    color: #15803D;
+    padding: 3px 9px;
+    border-radius: 5px;
+    font-weight: 700;
+    font-size: 10px;
+    letter-spacing: 0.05em;
+  }
   /* Sentiment highlights (dentro do card Sentimiento en el tiempo) */
   .sent-highlights {
     margin-top: 18px;
@@ -658,55 +757,46 @@
     <div class="nav-section-title">Reports</div>
     <div class="nav-item" data-scroll="section-mentions"><span class="nav-icon">📄</span>Executive Deck</div>
     <div class="nav-item" data-action="export"><span class="nav-icon">📥</span>Export</div>
-    <div class="nav-item" id="methodBtn" style="position:relative;"><span class="nav-icon">📘</span>Metodología</div>
+    <div class="nav-item method-item" id="methodBtn">
+      <span class="nav-icon">📘</span>Metodología
+      <div class="method-tooltip">
+        <div class="method-tt-title">
+          <span style="background:var(--primary);color:white;width:22px;height:22px;border-radius:6px;display:inline-flex;align-items:center;justify-content:center;font-size:12px;">📘</span>
+          Cómo se construyó esta base
+        </div>
+        <div class="method-tt-sub">Estudio de social listening del mercado brasileño hacia destinos de Chile · Cliente: gobierno chileno · Ventana: 12 meses.</div>
+        <div class="method-tt-grid">
+          <div>
+            <div class="method-tt-h">① Fuentes</div>
+            <div class="method-tt-b">Redes sociales públicas donde el brasileño investiga destinos: <b>TikTok</b> (principal plataforma de descubrimiento) e <b>Instagram</b> (reels y comentarios). Posts orgánicos, no anuncios.</div>
+          </div>
+          <div>
+            <div class="method-tt-h">② Recolección</div>
+            <div class="method-tt-b">Extracción vía <b>Apify Scrapers</b>, anclada en 19 queries (TikTok) + 12 hashtags (Instagram). Prioridad: posts de alto engagement + todos los comentarios asociados.</div>
+          </div>
+          <div>
+            <div class="method-tt-h">③ Modelado</div>
+            <div class="method-tt-b"><b>Esquema estrella</b>: hechos + dimensiones + bridges. <b>Sentimiento en dos capas</b>: LeIA (léxico VADER PT-BR) + reclasificación LLM de los 532 NEG originales — <b>90% eran falsos negativos</b>.</div>
+          </div>
+          <div>
+            <div class="method-tt-h">④ Tagging semántico</div>
+            <div class="method-tt-b">9 categorías multi-etiqueta: <i>pergunta_logística, pregunta_costo, pregunta_seguridad, pedido de recomendación, elogio de experiencia, barrera/queja, motivación/deseo, comparación, ruido</i>.</div>
+          </div>
+          <div style="grid-column:1/-1;">
+            <div class="method-tt-h">⑤ Actualización</div>
+            <div class="method-tt-b">Última recalibración: <b>22/07/2026</b>. Ventana móvil de 12 meses actualizada periódicamente. Pipeline auditable — Etapas A a F, documentadas en methodology_log.md.</div>
+          </div>
+        </div>
+        <div class="method-tt-foot">
+          <span>Base: <b>3.874 menciones PT-BR</b> · 3.768 clasificadas · 881 autores · 11 destinos</span>
+          <span class="method-tt-badge">✓ CALIBRADO LLM</span>
+        </div>
+      </div>
+    </div>
     <div class="project-badge">
       <div class="project-badge-label">Active Project</div>
       <div class="project-badge-name">Chile · Brasil</div>
       <div class="project-badge-status">3.874 menciones PT-BR</div>
-    </div>
-    <!-- Modal Metodología -->
-    <div id="methodOverlay" style="display:none;position:fixed;inset:0;background:rgba(15,18,30,0.75);backdrop-filter:blur(4px);z-index:200;align-items:flex-start;justify-content:center;overflow-y:auto;padding:40px 20px;">
-      <div id="methodPopover" style="background:#F9FAFB;color:var(--text);padding:32px 36px;border-radius:16px;font-size:13px;line-height:1.65;box-shadow:0 30px 80px rgba(15,18,30,0.5);max-width:720px;width:100%;position:relative;">
-        <button id="methodClose" style="position:absolute;top:16px;right:16px;background:transparent;border:none;color:var(--muted);font-size:24px;cursor:pointer;padding:4px 10px;line-height:1;border-radius:6px;transition:background 0.15s;" onmouseover="this.style.background='#F0F1F5'" onmouseout="this.style.background='transparent'">×</button>
-        <div style="display:flex;align-items:center;gap:12px;margin-bottom:6px;">
-          <div style="width:36px;height:36px;background:var(--primary);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;">📘</div>
-          <div>
-            <div style="color:var(--primary);font-weight:700;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;">Metodología del estudio</div>
-            <div style="font-size:18px;font-weight:700;letter-spacing:-0.01em;">Cómo se construyó esta base</div>
-          </div>
-        </div>
-        <div style="color:var(--muted);font-size:12px;margin-bottom:24px;padding-bottom:16px;border-bottom:1px solid var(--border);">
-          Estudio de social listening del mercado brasileño hacia destinos de Chile. Cliente: gobierno chileno · Ventana: 12 meses.
-        </div>
-
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px 32px;">
-          <div>
-            <div style="color:var(--primary);font-weight:700;font-size:11px;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:6px;">① Fuentes</div>
-            <div style="color:#374151;">Redes sociales públicas donde el brasileño investiga destinos: <b>TikTok</b> (principal plataforma de descubrimiento) e <b>Instagram</b> (reels y comentarios). Posts orgánicos, no anuncios.</div>
-          </div>
-          <div>
-            <div style="color:var(--primary);font-weight:700;font-size:11px;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:6px;">② Recolección</div>
-            <div style="color:#374151;">Extracción vía <b>Apify Scrapers</b> anclada en 19 queries de búsqueda (TikTok) y 12 hashtags (Instagram), mapeadas a los 10 destinos canónicos + Genérico Chile. Prioridad: posts de alto engagement + todos los comentarios asociados.</div>
-          </div>
-          <div>
-            <div style="color:var(--primary);font-weight:700;font-size:11px;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:6px;">③ Modelado</div>
-            <div style="color:#374151;"><b>Esquema estrella</b>: tabla de hechos + dimensiones (destino, plataforma, fecha, sentimiento) + bridges de tags y hashtags. <b>Sentimiento en dos capas</b>: LeIA (léxico VADER PT-BR) + reclasificación individual por Claude LLM de los 532 negativos originales — 90% eran falsos negativos.</div>
-          </div>
-          <div>
-            <div style="color:var(--primary);font-weight:700;font-size:11px;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:6px;">④ Tagging semántico</div>
-            <div style="color:#374151;">Cada texto clasificado en 9 categorías multi-etiqueta: <i>pergunta_logística, pregunta_costo, pregunta_seguridad, pedido de recomendación, elogio de experiencia, barrera/queja, motivación/deseo, comparación, ruido</i>. Regex explícito + Claude LLM para casos ambiguos.</div>
-          </div>
-          <div style="grid-column:1/-1;">
-            <div style="color:var(--primary);font-weight:700;font-size:11px;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:6px;">⑤ Actualización</div>
-            <div style="color:#374151;">Última recalibración: <b>22/07/2026</b>. La ventana móvil de 12 meses se actualiza periódicamente. Cada actualización pasa por el mismo pipeline auditable de las Etapas A a F, documentadas en methodology_log.md.</div>
-          </div>
-        </div>
-
-        <div style="margin-top:24px;padding-top:16px;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;gap:16px;font-size:12px;color:var(--muted);flex-wrap:wrap;">
-          <div>Base auditada: <b style="color:var(--text);">3.874 menciones PT-BR</b> · 3.768 con sentimiento clasificado · 881 autores únicos · 11 destinos canónicos.</div>
-          <div style="background:#DCFCE7;color:#15803D;padding:4px 10px;border-radius:6px;font-weight:600;font-size:10px;letter-spacing:0.05em;">✓ CALIBRADO LLM</div>
-        </div>
-      </div>
     </div>
   </aside>
 
@@ -1471,28 +1561,6 @@ document.addEventListener('click', () => {
 document.querySelectorAll('.info-popover').forEach(p => {
   p.addEventListener('click', e => e.stopPropagation());
 });
-
-// Metodología modal
-(function initMethod() {
-  const btn = document.getElementById('methodBtn');
-  const overlay = document.getElementById('methodOverlay');
-  const pop = document.getElementById('methodPopover');
-  const close = document.getElementById('methodClose');
-  btn.addEventListener('click', e => {
-    e.stopPropagation();
-    overlay.style.display = 'flex';
-  });
-  close.addEventListener('click', e => {
-    e.stopPropagation();
-    overlay.style.display = 'none';
-  });
-  overlay.addEventListener('click', e => {
-    if (e.target === overlay) overlay.style.display = 'none';
-  });
-  document.addEventListener('keydown', e => {
-    if (e.key === 'Escape') overlay.style.display = 'none';
-  });
-})();
 
 render();
 </script>
