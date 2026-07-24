@@ -551,46 +551,62 @@
     border-radius: 6px;
     margin-left: 10px;
   }
-  /* Metodología hover tooltip */
+  /* Metodología · panel lateral (hover) */
   .method-item {
     position: relative;
   }
+  /* velo: separa el panel del contenido sin ocultar el menú */
+  .method-item::after {
+    content: '';
+    position: fixed;
+    top: 0; right: 0; bottom: 0; left: 240px;
+    background: rgba(15,18,30,0.42);
+    opacity: 0;
+    visibility: hidden;
+    z-index: 1190;
+    pointer-events: none;
+    transition: opacity 0.18s, visibility 0s linear 0.18s;
+  }
+  .method-item:hover::after {
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 0.18s, visibility 0s;
+  }
   .method-tooltip {
     position: fixed;
-    left: 244px;
-    bottom: 20px;
-    width: 640px;
+    left: 240px;
+    top: 50%;
+    width: min(640px, calc(100vw - 280px));
+    max-height: calc(100vh - 48px);
+    overflow-y: auto;
+    overscroll-behavior: contain;
     background: #FFFFFF;
     color: var(--text);
-    padding: 22px 26px;
-    border-radius: 14px;
-    box-shadow: 0 24px 60px rgba(15,18,30,0.35), 0 0 0 1px rgba(0,0,0,0.04);
+    padding: 24px 28px;
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--primary);
+    border-radius: 0 14px 14px 0;
+    box-shadow: 0 32px 80px rgba(15,18,30,0.30), 0 2px 8px rgba(15,18,30,0.10);
     font-size: 12.5px;
     line-height: 1.55;
     opacity: 0;
     visibility: hidden;
-    transform: translateX(-6px);
-    transition: opacity 0.15s, transform 0.15s, visibility 0s linear 0.15s;
-    z-index: 500;
+    transform: translate(-10px, -50%);
+    transition: opacity 0.18s, transform 0.18s, visibility 0s linear 0.18s;
+    z-index: 1200;
     pointer-events: none;
   }
   .method-item:hover .method-tooltip {
     opacity: 1;
     visibility: visible;
-    transform: translateX(0);
-    transition: opacity 0.15s, transform 0.15s, visibility 0s;
+    transform: translate(0, -50%);
+    transition: opacity 0.18s, transform 0.18s, visibility 0s;
     pointer-events: auto;
   }
-  .method-tooltip::before {
-    content: '';
-    position: absolute;
-    left: -6px;
-    bottom: 32px;
-    width: 12px; height: 12px;
-    background: #FFFFFF;
-    transform: rotate(45deg);
-    box-shadow: -2px 2px 4px rgba(15,18,30,0.06);
-  }
+  .method-tooltip::-webkit-scrollbar { width: 8px; }
+  .method-tooltip::-webkit-scrollbar-track { background: transparent; }
+  .method-tooltip::-webkit-scrollbar-thumb { background: #D8DBE6; border-radius: 4px; }
+  .method-tooltip::-webkit-scrollbar-thumb:hover { background: #BFC4D4; }
   .method-tt-title {
     display: flex;
     align-items: center;
