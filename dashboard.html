@@ -1593,86 +1593,6 @@ function renderHeatmap(data) {
 document.getElementById('destSelect').addEventListener('change', e=>{
   currentDest = e.target.value;
 
-/* ===== IA demo widget ===== */
-(function iaDemo(){
-  var QA = [
-    { q: '¿Cuál es la mayor brecha de contenido hoy?',
-      a: 'La brecha está en <b>logística</b>, no en precio. Hay <b>662 preguntas</b> sobre cómo llegar, qué ruta armar y cuándo ir (base completa; 610 en la base PT-BR del panel), frente a solo <b>198 posts</b> de creators que ya responden costo o dan consejos. La oferta sobre precio existe y es abundante — el vacío es informacional y operativo.' },
-    { q: '¿Qué destino tiene la percepción más positiva?',
-      a: '<b>Atacama</b>. Concentra <b>163 elogios</b> de experiencia y un <b>37,7% de sentimiento positivo</b> sobre 831 menciones — el desempeño más fuerte entre los destinos con base relevante. Santiago, en contraste, queda en 22,5% y con un perfil de conversación más transaccional.' },
-    { q: '¿El brasileño se está quejando de Chile?',
-      a: 'No. Apenas <b>1,4%</b> de la conversación tiene sentimiento negativo (52 de 3.874), y al etiquetar <i>queja explícita</i> el número baja a <b>9 registros reales</b>. No hay clamor amplio: Chile no tiene un problema de reputación, sino de instrucción — el viajero necesita saber <i>cómo</i>, no ser convencido.' }
-  ];
-
-  var fab = document.getElementById('iaFab');
-  var panel = document.getElementById('iaPanel');
-  var qWrap = document.getElementById('iaQuestions');
-  var body = document.getElementById('iaBody');
-  if (!fab || !panel) return;
-
-  var typing = null;
-  function stopTyping(){ if (typing){ clearInterval(typing); typing = null; } }
-
-  function iaRenderQ(){
-    stopTyping();
-    qWrap.innerHTML = '';
-    QA.forEach(function(item, idx){
-      var b = document.createElement('button');
-      b.className = 'ia-q';
-      b.innerHTML = '<span class="ia-q-ic">✦</span>' + item.q;
-      b.addEventListener('click', function(){ answer(idx, b); });
-      qWrap.appendChild(b);
-    });
-  }
-
-  function answer(idx, btn){
-    stopTyping();
-    // remove respuesta anterior si existe
-    var old = qWrap.querySelector('.ia-answer');
-    if (old) old.remove();
-    Array.prototype.forEach.call(qWrap.querySelectorAll('.ia-q'), function(x){ x.disabled = false; });
-    btn.disabled = true;
-
-    var ans = document.createElement('div');
-    ans.className = 'ia-answer';
-    ans.innerHTML = '<span class="ia-a-label">Respuesta</span><span class="ia-txt"></span><span class="ia-cursor"></span>';
-    btn.insertAdjacentElement('afterend', ans);
-
-    var target = ans.querySelector('.ia-txt');
-    var cursor = ans.querySelector('.ia-cursor');
-    var full = QA[idx].a;
-    var i = 0;
-    // digita ignorando tags HTML (avança de bloco em bloco)
-    typing = setInterval(function(){
-      i += 3;
-      if (i >= full.length){
-        target.innerHTML = full;
-        stopTyping();
-        if (cursor) cursor.remove();
-        return;
-      }
-      var slice = full.slice(0, i);
-      var open = slice.lastIndexOf('<'), close = slice.lastIndexOf('>');
-      if (open > close) slice = slice.slice(0, open); // não corta no meio de uma tag
-      target.innerHTML = slice;
-      body.scrollTop = body.scrollHeight;
-    }, 16);
-  }
-
-  function toggle(open){
-    var willOpen = (typeof open === 'boolean') ? open : !panel.classList.contains('open');
-    panel.classList.toggle('open', willOpen);
-    fab.classList.toggle('open', willOpen);
-    fab.innerHTML = willOpen ? '×' : '✦';
-    if (willOpen) iaRenderQ(); else stopTyping();
-  }
-
-  fab.addEventListener('click', function(e){ e.stopPropagation(); toggle(); });
-  document.addEventListener('click', function(e){
-    if (panel.classList.contains('open') && !panel.contains(e.target) && e.target !== fab) toggle(false);
-  });
-  document.addEventListener('keydown', function(e){ if (e.key === 'Escape') toggle(false); });
-})();
 
 
   render();
@@ -1765,5 +1685,93 @@ render();
   <div class="ia-foot"><span class="ia-foot-dot"></span>Demostración · respuestas basadas en la base cargada</div>
 </div>
 
+
+<script>
+/* ===== IA demo widget ===== */
+function iaDemoInit(){
+  var QA = [
+    { q: '¿Cuál es la mayor brecha de contenido hoy?',
+      a: 'La brecha está en <b>logística</b>, no en precio. Hay <b>662 preguntas</b> sobre cómo llegar, qué ruta armar y cuándo ir (base completa; 610 en la base PT-BR del panel), frente a solo <b>198 posts</b> de creators que ya responden costo o dan consejos. La oferta sobre precio existe y es abundante — el vacío es informacional y operativo.' },
+    { q: '¿Qué destino tiene la percepción más positiva?',
+      a: '<b>Atacama</b>. Concentra <b>163 elogios</b> de experiencia y un <b>37,7% de sentimiento positivo</b> sobre 831 menciones — el desempeño más fuerte entre los destinos con base relevante. Santiago, en contraste, queda en 22,5% y con un perfil de conversación más transaccional.' },
+    { q: '¿El brasileño se está quejando de Chile?',
+      a: 'No. Apenas <b>1,4%</b> de la conversación tiene sentimiento negativo (52 de 3.874), y al etiquetar <i>queja explícita</i> el número baja a <b>9 registros reales</b>. No hay clamor amplio: Chile no tiene un problema de reputación, sino de instrucción — el viajero necesita saber <i>cómo</i>, no ser convencido.' }
+  ];
+
+  var fab = document.getElementById('iaFab');
+  var panel = document.getElementById('iaPanel');
+  var qWrap = document.getElementById('iaQuestions');
+  var body = document.getElementById('iaBody');
+  if (!fab || !panel) return;
+
+  var typing = null;
+  function stopTyping(){ if (typing){ clearInterval(typing); typing = null; } }
+
+  function iaRenderQ(){
+    stopTyping();
+    qWrap.innerHTML = '';
+    QA.forEach(function(item, idx){
+      var b = document.createElement('button');
+      b.className = 'ia-q';
+      b.innerHTML = '<span class="ia-q-ic">✦</span>' + item.q;
+      b.addEventListener('click', function(){ answer(idx, b); });
+      qWrap.appendChild(b);
+    });
+  }
+
+  function answer(idx, btn){
+    stopTyping();
+    // remove respuesta anterior si existe
+    var old = qWrap.querySelector('.ia-answer');
+    if (old) old.remove();
+    Array.prototype.forEach.call(qWrap.querySelectorAll('.ia-q'), function(x){ x.disabled = false; });
+    btn.disabled = true;
+
+    var ans = document.createElement('div');
+    ans.className = 'ia-answer';
+    ans.innerHTML = '<span class="ia-a-label">Respuesta</span><span class="ia-txt"></span><span class="ia-cursor"></span>';
+    btn.insertAdjacentElement('afterend', ans);
+
+    var target = ans.querySelector('.ia-txt');
+    var cursor = ans.querySelector('.ia-cursor');
+    var full = QA[idx].a;
+    var i = 0;
+    // digita ignorando tags HTML (avança de bloco em bloco)
+    typing = setInterval(function(){
+      i += 3;
+      if (i >= full.length){
+        target.innerHTML = full;
+        stopTyping();
+        if (cursor) cursor.remove();
+        return;
+      }
+      var slice = full.slice(0, i);
+      var open = slice.lastIndexOf('<'), close = slice.lastIndexOf('>');
+      if (open > close) slice = slice.slice(0, open); // não corta no meio de uma tag
+      target.innerHTML = slice;
+      body.scrollTop = body.scrollHeight;
+    }, 16);
+  }
+
+  function toggle(open){
+    var willOpen = (typeof open === 'boolean') ? open : !panel.classList.contains('open');
+    panel.classList.toggle('open', willOpen);
+    fab.classList.toggle('open', willOpen);
+    fab.innerHTML = willOpen ? '×' : '✦';
+    if (willOpen) iaRenderQ(); else stopTyping();
+  }
+
+  fab.addEventListener('click', function(e){ e.stopPropagation(); toggle(); });
+  document.addEventListener('click', function(e){
+    if (panel.classList.contains('open') && !panel.contains(e.target) && e.target !== fab) toggle(false);
+  });
+  document.addEventListener('keydown', function(e){ if (e.key === 'Escape') toggle(false); });
+}
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', iaDemoInit);
+} else {
+  iaDemoInit();
+}
+</script>
 </body>
 </html>
