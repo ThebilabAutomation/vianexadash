@@ -48,6 +48,7 @@
     color: var(--sidebar-text);
     padding: 24px 0;
     position: sticky;
+    z-index: 900;
     top: 0;
     height: 100vh;
     overflow-y: auto;
@@ -555,23 +556,6 @@
   .method-item {
     position: relative;
   }
-  /* velo: separa el panel del contenido sin ocultar el menú */
-  .method-item::after {
-    content: '';
-    position: fixed;
-    top: 0; right: 0; bottom: 0; left: 240px;
-    background: rgba(15,18,30,0.42);
-    opacity: 0;
-    visibility: hidden;
-    z-index: 1190;
-    pointer-events: none;
-    transition: opacity 0.18s, visibility 0s linear 0.18s;
-  }
-  .method-item:hover::after {
-    opacity: 1;
-    visibility: visible;
-    transition: opacity 0.18s, visibility 0s;
-  }
   .method-tooltip {
     position: fixed;
     left: 240px;
@@ -751,6 +735,78 @@
     gap: 3px;
   }
   .sent-hi-link:hover { text-decoration: underline; }
+
+  /* ===== IA demo widget ===== */
+  .ia-fab {
+    position: fixed; right: 26px; bottom: 26px; z-index: 1300;
+    width: 58px; height: 58px; border-radius: 50%;
+    background: linear-gradient(135deg, #E88832, #D9701A);
+    color: #fff; border: none; cursor: pointer;
+    box-shadow: 0 10px 28px rgba(217,112,26,0.42), 0 2px 6px rgba(0,0,0,0.14);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 24px; transition: transform 0.18s, box-shadow 0.18s;
+  }
+  .ia-fab:hover { transform: translateY(-2px) scale(1.04); box-shadow: 0 14px 34px rgba(217,112,26,0.5); }
+  .ia-fab.open { transform: rotate(45deg); }
+  .ia-panel {
+    position: fixed; right: 26px; bottom: 98px; z-index: 1300;
+    width: min(400px, calc(100vw - 40px));
+    max-height: min(560px, calc(100vh - 140px));
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 16px; box-shadow: 0 24px 60px rgba(15,18,30,0.28), 0 2px 8px rgba(15,18,30,0.10);
+    display: flex; flex-direction: column; overflow: hidden;
+    opacity: 0; visibility: hidden; transform: translateY(12px) scale(0.98);
+    transform-origin: bottom right;
+    transition: opacity 0.2s, transform 0.2s, visibility 0s linear 0.2s;
+  }
+  .ia-panel.open { opacity: 1; visibility: visible; transform: translateY(0) scale(1);
+    transition: opacity 0.2s, transform 0.2s, visibility 0s; }
+  .ia-head {
+    padding: 16px 18px; border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; gap: 11px; flex-shrink: 0;
+  }
+  .ia-head-ic {
+    width: 34px; height: 34px; border-radius: 9px; flex-shrink: 0;
+    background: linear-gradient(135deg, #E88832, #D9701A); color: #fff;
+    display: flex; align-items: center; justify-content: center; font-size: 17px;
+  }
+  .ia-head-t { font-weight: 700; font-size: 14px; color: var(--text); letter-spacing: -0.01em; }
+  .ia-head-s { font-size: 11px; color: var(--muted); margin-top: 1px; }
+  .ia-body { padding: 16px 18px; overflow-y: auto; flex: 1; overscroll-behavior: contain; }
+  .ia-intro { font-size: 12.5px; color: var(--muted); line-height: 1.5; margin-bottom: 14px; }
+  .ia-q {
+    display: block; width: 100%; text-align: left; margin-bottom: 9px;
+    padding: 12px 14px; border: 1px solid var(--border); border-radius: 10px;
+    background: #FafBfc; color: var(--text); font-size: 12.5px; font-weight: 500;
+    line-height: 1.4; cursor: pointer; font-family: inherit;
+    transition: border-color 0.15s, background 0.15s, transform 0.1s;
+  }
+  .ia-q:hover { border-color: var(--primary); background: #FFF7EF; }
+  .ia-q:active { transform: scale(0.99); }
+  .ia-q:disabled { cursor: default; opacity: 0.5; }
+  .ia-q .ia-q-ic { color: var(--primary); font-weight: 700; margin-right: 7px; }
+  .ia-answer {
+    margin: 4px 0 16px; padding: 14px 16px; border-radius: 10px;
+    background: #FFF7EF; border: 1px solid #F5D9BE;
+    font-size: 12.5px; line-height: 1.6; color: #374151;
+  }
+  .ia-answer .ia-a-label {
+    display: block; font-size: 9.5px; font-weight: 700; letter-spacing: 0.09em;
+    text-transform: uppercase; color: var(--primary); margin-bottom: 7px;
+  }
+  .ia-answer b { color: var(--text); }
+  .ia-cursor {
+    display: inline-block; width: 7px; height: 14px; margin-left: 1px;
+    background: var(--primary); vertical-align: text-bottom; animation: ia-blink 0.9s steps(1) infinite;
+  }
+  @keyframes ia-blink { 50% { opacity: 0; } }
+  .ia-foot {
+    padding: 9px 18px; border-top: 1px solid var(--border); flex-shrink: 0;
+    font-size: 9.5px; color: var(--muted); letter-spacing: 0.04em;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .ia-foot-dot { width: 5px; height: 5px; border-radius: 50%; background: #C4C8D4; }
+
 </style>
 </head>
 <body>
@@ -1536,6 +1592,89 @@ function renderHeatmap(data) {
 // Filter changes
 document.getElementById('destSelect').addEventListener('change', e=>{
   currentDest = e.target.value;
+
+/* ===== IA demo widget ===== */
+(function iaDemo(){
+  var QA = [
+    { q: '¿Cuál es la mayor brecha de contenido hoy?',
+      a: 'La brecha está en <b>logística</b>, no en precio. Hay <b>662 preguntas</b> sobre cómo llegar, qué ruta armar y cuándo ir (base completa; 610 en la base PT-BR del panel), frente a solo <b>198 posts</b> de creators que ya responden costo o dan consejos. La oferta sobre precio existe y es abundante — el vacío es informacional y operativo.' },
+    { q: '¿Qué destino tiene la percepción más positiva?',
+      a: '<b>Atacama</b>. Concentra <b>163 elogios</b> de experiencia y un <b>37,7% de sentimiento positivo</b> sobre 831 menciones — el desempeño más fuerte entre los destinos con base relevante. Santiago, en contraste, queda en 22,5% y con un perfil de conversación más transaccional.' },
+    { q: '¿El brasileño se está quejando de Chile?',
+      a: 'No. Apenas <b>1,4%</b> de la conversación tiene sentimiento negativo (52 de 3.874), y al etiquetar <i>queja explícita</i> el número baja a <b>9 registros reales</b>. No hay clamor amplio: Chile no tiene un problema de reputación, sino de instrucción — el viajero necesita saber <i>cómo</i>, no ser convencido.' }
+  ];
+
+  var fab = document.getElementById('iaFab');
+  var panel = document.getElementById('iaPanel');
+  var qWrap = document.getElementById('iaQuestions');
+  var body = document.getElementById('iaBody');
+  if (!fab || !panel) return;
+
+  var typing = null;
+  function stopTyping(){ if (typing){ clearInterval(typing); typing = null; } }
+
+  function iaRenderQ(){
+    stopTyping();
+    qWrap.innerHTML = '';
+    QA.forEach(function(item, idx){
+      var b = document.createElement('button');
+      b.className = 'ia-q';
+      b.innerHTML = '<span class="ia-q-ic">✦</span>' + item.q;
+      b.addEventListener('click', function(){ answer(idx, b); });
+      qWrap.appendChild(b);
+    });
+  }
+
+  function answer(idx, btn){
+    stopTyping();
+    // remove respuesta anterior si existe
+    var old = qWrap.querySelector('.ia-answer');
+    if (old) old.remove();
+    Array.prototype.forEach.call(qWrap.querySelectorAll('.ia-q'), function(x){ x.disabled = false; });
+    btn.disabled = true;
+
+    var ans = document.createElement('div');
+    ans.className = 'ia-answer';
+    ans.innerHTML = '<span class="ia-a-label">Respuesta</span><span class="ia-txt"></span><span class="ia-cursor"></span>';
+    btn.insertAdjacentElement('afterend', ans);
+
+    var target = ans.querySelector('.ia-txt');
+    var cursor = ans.querySelector('.ia-cursor');
+    var full = QA[idx].a;
+    var i = 0;
+    // digita ignorando tags HTML (avança de bloco em bloco)
+    typing = setInterval(function(){
+      i += 3;
+      if (i >= full.length){
+        target.innerHTML = full;
+        stopTyping();
+        if (cursor) cursor.remove();
+        return;
+      }
+      var slice = full.slice(0, i);
+      var open = slice.lastIndexOf('<'), close = slice.lastIndexOf('>');
+      if (open > close) slice = slice.slice(0, open); // não corta no meio de uma tag
+      target.innerHTML = slice;
+      body.scrollTop = body.scrollHeight;
+    }, 16);
+  }
+
+  function toggle(open){
+    var willOpen = (typeof open === 'boolean') ? open : !panel.classList.contains('open');
+    panel.classList.toggle('open', willOpen);
+    fab.classList.toggle('open', willOpen);
+    fab.innerHTML = willOpen ? '×' : '✦';
+    if (willOpen) iaRenderQ(); else stopTyping();
+  }
+
+  fab.addEventListener('click', function(e){ e.stopPropagation(); toggle(); });
+  document.addEventListener('click', function(e){
+    if (panel.classList.contains('open') && !panel.contains(e.target) && e.target !== fab) toggle(false);
+  });
+  document.addEventListener('keydown', function(e){ if (e.key === 'Escape') toggle(false); });
+})();
+
+
   render();
 });
 document.getElementById('mentionsSentFilter').addEventListener('change', e=>{
@@ -1610,5 +1749,21 @@ document.getElementById('logoutBtn').addEventListener('click', () => {
 
 render();
 </script>
+<button class="ia-fab" id="iaFab" aria-label="Asistente de datos">✦</button>
+<div class="ia-panel" id="iaPanel" role="dialog" aria-label="Asistente de datos">
+  <div class="ia-head">
+    <div class="ia-head-ic">✦</div>
+    <div>
+      <div class="ia-head-t">Asistente de datos</div>
+      <div class="ia-head-s">Preguntas sobre este panel</div>
+    </div>
+  </div>
+  <div class="ia-body" id="iaBody">
+    <div class="ia-intro">Toca una pregunta y la respuesta se genera a partir de los datos del panel.</div>
+    <div id="iaQuestions"></div>
+  </div>
+  <div class="ia-foot"><span class="ia-foot-dot"></span>Demostración · respuestas basadas en la base cargada</div>
+</div>
+
 </body>
 </html>
