@@ -271,24 +271,54 @@
     .brand-headline h1 { font-size: 20px; }
     .form-side { padding: 36px 32px; }
   }
+/* Ajuste de alinhamento após remover a frase inferior */
+  .brand-side {
+    justify-content: flex-start;
+    gap: 80px;
+  }
+
+  @media (max-width: 780px) {
+    .brand-side {
+      gap: 40px;
+    }
+  }
 </style>
 </head>
+
 <body>
   <div class="layout">
+
     <!-- Brand side -->
     <div class="brand-side">
+
       <div>
         <div class="brand-logo">
           <div class="brand-mark">▶</div>
-          <div class="brand-name">via <span>nexa</span></div>
+          <div class="brand-name">
+            via <span>nexa</span>
+          </div>
         </div>
-        <div class="brand-sub">Consulting · 2026</div>
+
+        <div class="brand-sub">
+          Consulting · 2026
+        </div>
       </div>
+
       <div class="brand-headline">
-        <div class="kicker">Chile · Estudio 2026</div>
-        <h1>Lo que el brasileño está diciendo sobre Chile</h1>
-        <p>Social listening del mercado brasileño hacia destinos chilenos. Análisis calibrado por LLM, filtrado a PT-BR, con evidencia textual auditable.</p>
+        <div class="kicker">
+          Chile · Estudio 2026
+        </div>
+
+        <h1>
+          Lo que el brasileño está diciendo sobre Chile
+        </h1>
+
+        <p>
+          Social listening del mercado brasileño hacia destinos chilenos.
+          Análisis calibrado por LLM, filtrado a PT-BR, con evidencia textual auditable.
+        </p>
       </div>
+
     </div>
 
     <!-- Form side -->
