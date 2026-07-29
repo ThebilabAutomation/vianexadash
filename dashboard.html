@@ -7,6 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   :root {
@@ -1607,6 +1608,9 @@ document.getElementById('mentionsSentFilter').addEventListener('change', e=>{
   });
 })();
 
+Fica assim:
+
+javascript
 // SIDEBAR NAV — scroll to section + active state
 document.querySelectorAll('.nav-item[data-scroll]').forEach(item => {
   item.addEventListener('click', () => {
@@ -1618,17 +1622,38 @@ document.querySelectorAll('.nav-item[data-scroll]').forEach(item => {
     }
   });
 });
-// Export button
+// Export button — exporta JPEG del dashboard
 document.querySelectorAll('.nav-item[data-action="export"]').forEach(item => {
-  item.addEventListener('click', () => {
-    const d = getData();
-    const blob = new Blob([JSON.stringify(d, null, 2)], {type:'application/json'});
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `chile_social_listening_${currentDest}_${currentMonth}.json`;
-    a.click();
-    URL.revokeObjectURL(url);
+  item.addEventListener('click', async () => {
+    const target = document.querySelector('main.main');
+    if (!target) return;
+
+    // feedback visual
+    const originalHTML = item.innerHTML;
+    item.style.pointerEvents = 'none';
+    item.innerHTML = '<span class="nav-icon">⏳</span>Generando...';
+
+    try {
+      const canvas = await html2canvas(target, {
+        backgroundColor: '#ffffff',
+        scale: 2,
+        useCORS: true,
+        logging: false,
+        windowWidth: target.scrollWidth,
+        windowHeight: target.scrollHeight
+      });
+
+      const link = document.createElement('a');
+      link.download = `chile_social_listening_${currentDest}_${currentMonth}.jpg`;
+      link.href = canvas.toDataURL('image/jpeg', 0.92);
+      link.click();
+    } catch (err) {
+      console.error('Error exportando:', err);
+      alert('No se pudo generar la imagen. Intenta de nuevo.');
+    } finally {
+      item.innerHTML = originalHTML;
+      item.style.pointerEvents = '';
+    }
   });
 });
 
