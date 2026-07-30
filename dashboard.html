@@ -1270,56 +1270,6 @@ function render() {
     }
   });
 
-  // Platform donut — UNIFICADO por plataforma (TikTok / Instagram), split posts/comentarios en tooltip
-  destroyChart('platform');
-  const tt_posts = d.platform.tiktok_post || 0;
-  const tt_comments = d.platform.tiktok_comment || 0;
-  const ig_posts = d.platform.instagram_post || 0;
-  const ig_comments = d.platform.instagram_comment || 0;
-  const tt_total = tt_posts + tt_comments;
-  const ig_total = ig_posts + ig_comments;
-  const grand = tt_total + ig_total;
-  charts.platform = new Chart(document.getElementById('chartPlatform'), {
-    type:'doughnut',
-    data:{
-      labels: ['TikTok','Instagram'],
-      datasets:[{
-        data: [tt_total, ig_total],
-        backgroundColor:[COLORS.primary, COLORS.purple],
-        borderWidth:2,
-        borderColor:'#fff'
-      }]
-    },
-    options:{
-      responsive:true, maintainAspectRatio:false,
-      cutout:'62%',
-      plugins:{
-        legend:{position:'bottom',labels:{boxWidth:10,font:{size:11},padding:8}},
-        tooltip:{
-          callbacks:{
-            label: function(ctx) {
-              const isTT = ctx.label === 'TikTok';
-              const total = isTT ? tt_total : ig_total;
-              const posts = isTT ? tt_posts : ig_posts;
-              const comments = isTT ? tt_comments : ig_comments;
-              const pctTotal = grand ? (total/grand*100).toFixed(1).replace('.',',') : '0';
-              const pctPosts = total ? (posts/total*100).toFixed(1).replace('.',',') : '0';
-              const pctComments = total ? (comments/total*100).toFixed(1).replace('.',',') : '0';
-              return [
-                ctx.label+': '+total.toLocaleString('es-ES')+' ('+pctTotal+'%)',
-                '  · Posts: '+posts.toLocaleString('es-ES')+' ('+pctPosts+'%)',
-                '  · Comentarios: '+comments.toLocaleString('es-ES')+' ('+pctComments+'%)'
-              ];
-            }
-          },
-          padding: 12,
-          titleFont:{size:12},
-          bodyFont:{size:11}
-        }
-      }
-    }
-  });
-
   // Destinos bar
   destroyChart('destinos');
   const destOrder = ['Generico Chile','Atacama','Santiago','Ski','Torres del Paine',
@@ -1554,7 +1504,7 @@ function renderEmpty() {
   document.getElementById('kpi-pos-sub').textContent = '';
   document.getElementById('kpi-neg').textContent = '—';
   document.getElementById('kpi-neg-sub').textContent = '';
-  ['temporal','platform','destinos','sentDest','sentTime','gauge','tags'].forEach(destroyChart);
+  ['temporal','destinos','sentDest','sentTime','gauge','tags'].forEach(destroyChart);
   document.querySelector('#tblHashtags tbody').innerHTML = '<tr><td colspan="2" style="color:var(--muted);padding:16px;text-align:center;">Sin datos</td></tr>';
   document.querySelector('#tblAuthors tbody').innerHTML = '<tr><td colspan="3" style="color:var(--muted);padding:16px;text-align:center;">Sin datos</td></tr>';
   document.getElementById('heatmap').innerHTML = '<div style="padding:24px;color:var(--muted);text-align:center;">Sin datos para el período seleccionado</div>';
