@@ -909,9 +909,7 @@
           <option value="Isla de Pascua">Isla de Pascua</option>
           <option value="Generico Chile">Genérico Chile</option>
         </select>
-        <select class="dest-select" id="monthSelect" style="min-width:160px">
-          <option value="all">📅 Todos los meses</option>
-        </select>
+
       </div>
     </div>
 
@@ -1498,7 +1496,7 @@ function escapeHtml(s) {
 
 function renderEmpty() {
   document.getElementById('kpi-total').textContent = '0';
-  document.getElementById('kpi-total-sub').textContent = `Sin datos para ${destLabel(currentDest)} en ${monthLabel(currentMonth)}`;
+  document.getElementById('kpi-total-sub').textContent = `Sin datos para ${destLabel(currentDest)}`;
   document.getElementById('kpi-reach').textContent = '—';
   document.getElementById('kpi-pos').textContent = '—';
   document.getElementById('kpi-pos-sub').textContent = '';
@@ -1536,20 +1534,7 @@ document.getElementById('mentionsSentFilter').addEventListener('change', e=>{
   render();
 });
 
-// Popular dropdown de mês com base nos meses disponíveis
-(function initMonthSelect() {
-  const sel = document.getElementById('monthSelect');
-  DATA.meses_disponiveis.slice().reverse().forEach(ym => {
-    const opt = document.createElement('option');
-    opt.value = ym;
-    opt.textContent = monthLabel(ym);
-    sel.appendChild(opt);
-  });
-  sel.addEventListener('change', e => {
-    currentMonth = e.target.value;
-    render();
-  });
-})();
+
 
 // SIDEBAR NAV — scroll to section + active state
 document.querySelectorAll('.nav-item[data-scroll]').forEach(item => {
@@ -1584,7 +1569,7 @@ document.querySelectorAll('.nav-item[data-action="export"]').forEach(item => {
       });
 
       const link = document.createElement('a');
-      link.download = `chile_social_listening_${currentDest}_${currentMonth}.jpg`;
+      link.download = `chile_social_listening_${currentDest}.jpg`;
       link.href = canvas.toDataURL('image/jpeg', 0.92);
       link.click();
     } catch (err) {
