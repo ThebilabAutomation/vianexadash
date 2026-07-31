@@ -818,74 +818,71 @@
 </head>
 <body>
 <div class="layout">
+
   <!-- SIDEBAR -->
-  <aside class="sidebar">
-    <div class="brand">
-      <div class="brand-logo">
-        <div class="brand-mark">▶</div>
-        <div class="brand-name">via <span>nexa</span></div>
+<aside class="sidebar">
+  <div class="brand">
+    <div class="brand-logo">
+      <div class="brand-mark">▶</div>
+      <div class="brand-name">via <span>nexa</span></div>
+    </div>
+    <div class="brand-sub">Consulting · 2026</div>
+  </div>
+  <div class="nav-section-title">Projects</div>
+  <div class="nav-item active" data-scroll="section-overview"><span class="nav-icon">📊</span>Overview</div>
+  <div class="nav-item" data-scroll="section-analysis"><span class="nav-icon">💬</span>Analysis</div>
+  <div class="nav-item" data-scroll="section-mentions"><span class="nav-icon">🔎</span>Mentions</div>
+  <div class="nav-item" data-scroll="section-hashtags"><span class="nav-icon">🏷️</span>Hashtags</div>
+  <div class="nav-item" data-scroll="section-authors"><span class="nav-icon">👥</span>Authors</div>
+  <div class="nav-section-title">Reports</div>
+  <div class="nav-item nav-item-locked" title="Disponible en el plan Pro">
+    <span class="nav-icon">📄</span>Executive Deck
+    <span class="nav-badge-pro">PRO</span>
+  </div>
+  <div class="nav-item" data-action="export"><span class="nav-icon">📥</span>Export</div>
+  <div class="nav-item method-item" id="methodBtn">
+    <span class="nav-icon">📘</span>Metodología
+    <div class="method-tooltip">
+      <div class="method-tt-title">
+        <span style="background:var(--primary);color:white;width:22px;height:22px;border-radius:6px;display:inline-flex;align-items:center;justify-content:center;font-size:12px;">📘</span>
+        Cómo se construyó esta base
       </div>
-      <div class="brand-sub">Consulting · 2026</div>
-    </div>
-    <div class="nav-section-title">Projects</div>
-    <div class="nav-item active" data-scroll="section-overview"><span class="nav-icon">📊</span>Overview</div>
-    <div class="nav-item" data-scroll="section-analysis"><span class="nav-icon">💬</span>Analysis</div>
-    <div class="nav-item" data-scroll="section-mentions"><span class="nav-icon">🔎</span>Mentions</div>
-    <div class="nav-item" data-scroll="section-hashtags"><span class="nav-icon">🏷️</span>Hashtags</div>
-    <div class="nav-item" data-scroll="section-authors"><span class="nav-icon">👥</span>Authors</div>
-    <div class="nav-section-title">Reports</div>
-    <div class="nav-item nav-item-locked" title="Disponible en el plan Pro">
-      <span class="nav-icon">📄</span>Executive Deck
-      <span class="nav-badge-pro">PRO</span>
-    </div>
-    <div class="nav-item" data-action="export"><span class="nav-icon">📥</span>Export</div>
-    <div class="nav-item method-item" id="methodBtn">
-      <span class="nav-icon">📘</span>Metodología
-      <div class="method-tooltip">
-        <div class="method-tt-title">
-          <span style="background:var(--primary);color:white;width:22px;height:22px;border-radius:6px;display:inline-flex;align-items:center;justify-content:center;font-size:12px;">📘</span>
-          Cómo se construyó esta base
+      <div class="method-tt-sub">Estudio de social listening del mercado brasileño hacia destinos de Chile · Ventana móvil: 12 meses.</div>
+      <div class="method-tt-grid">
+        <div>
+          <div class="method-tt-h">① Fuentes</div>
+          <div class="method-tt-b">Redes sociales públicas donde el brasileño investiga destinos: <b>TikTok</b> e <b>Instagram</b>. Contenido orgánico — posts y comentarios, no anuncios.</div>
         </div>
-        <div class="method-tt-sub">Estudio de social listening del mercado brasileño hacia destinos de Chile · Cliente: gobierno chileno · Ventana: 12 meses.</div>
-        <div class="method-tt-grid">
-          <div>
-            <div class="method-tt-h">① Fuentes</div>
-            <div class="method-tt-b">Redes sociales públicas donde el brasileño investiga destinos: <b>TikTok</b> (principal plataforma de descubrimiento) e <b>Instagram</b> (reels y comentarios). Posts orgánicos, no anuncios.</div>
-          </div>
-          <div>
-            <div class="method-tt-h">② Recolección</div>
-            <div class="method-tt-b">Extracción vía <b>Apify Scrapers</b>, anclada en 19 queries (TikTok) + 12 hashtags (Instagram). Prioridad: posts de alto engagement + todos los comentarios asociados.</div>
-          </div>
-          <div>
-            <div class="method-tt-h">③ Modelado</div>
-            <div class="method-tt-b"><b>Esquema estrella</b>: hechos + dimensiones + bridges. <b>Sentimiento en dos capas</b>: LeIA (léxico VADER PT-BR) + reclasificación LLM de los 532 NEG originales — <b>90% eran falsos negativos</b>.</div>
-          </div>
-          <div>
-            <div class="method-tt-h">④ Tagging semántico</div>
-            <div class="method-tt-b"><b>11 categorías</b> multi-etiqueta. En la <b>Etapa G</b> se separó <i>quien pregunta</i> de <i>quien responde</i>: nacen <i>conteudo_custo</i> y <i>conteudo_dica</i>. Y <i>barrera/queja</i> fue reclasificada por LLM: <b>52 &rarr; 9</b> (83% eran falsos positivos del regex).</div>
-          </div>
-          <div style="grid-column:1/-1;">
-            <div class="method-tt-h">⑤ Actualización</div>
-            <div class="method-tt-b">Última recalibración: <b>23/07/2026</b>. Ventana móvil de 12 meses actualizada periódicamente. Pipeline auditable — Etapas <b>A a G</b>, documentadas en methodology_log.md. Columnas de auditoría: <i>barreira_source_v2</i> (9 kept / 43 removed) y <i>tag_split_source</i> (256 registros).</div>
-          </div>
+        <div>
+          <div class="method-tt-h">② Recolección</div>
+          <div class="method-tt-b">Extracción estructurada de posts de alto engagement y de sus comentarios asociados, mediante un pipeline de recolección propietario.</div>
         </div>
-        <div class="method-tt-foot">
-          <span>Base: <b>3.874 menciones PT-BR</b> · 3.768 clasificadas · 881 autores · 11 destinos</span>
-          <span class="method-tt-badge">✓ CALIBRADO LLM</span>
+        <div>
+          <div class="method-tt-h">③ Análisis</div>
+          <div class="method-tt-b">Clasificación temática y de sentimiento en múltiples capas, calibrada con IA para reducir falsos positivos y negativos. Metodología propietaria.</div>
+        </div>
+        <div>
+          <div class="method-tt-h">④ Actualización</div>
+          <div class="method-tt-b">Última recalibración: <b>23/07/2026</b>. Ventana móvil de 12 meses, actualizada periódicamente. Pipeline auditable, documentado internamente.</div>
         </div>
       </div>
+      <div class="method-tt-foot">
+        <span>Base: <b>3.874 menciones PT-BR</b> · 881 autores · 11 destinos</span>
+        <span class="method-tt-badge">✓ CALIBRADO LLM</span>
+      </div>
     </div>
-    <div class="project-badge">
-      <div class="project-badge-label">Active Project</div>
-      <div class="project-badge-name">Chile · Brasil</div>
-      <div class="project-badge-status">3.874 menciones PT-BR</div>
-    </div>
-    <div style="margin:0 24px 24px;">
-      <button id="logoutBtn" style="width:100%;background:transparent;border:1px solid rgba(255,255,255,0.12);color:#B4B9C9;padding:9px 12px;border-radius:8px;font-size:12px;font-family:inherit;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:background 0.15s,border-color 0.15s;" onmouseover="this.style.background='rgba(239,68,68,0.08)';this.style.borderColor='rgba(239,68,68,0.3)';this.style.color='#F87171'" onmouseout="this.style.background='transparent';this.style.borderColor='rgba(255,255,255,0.12)';this.style.color='#B4B9C9'">
-        <span>⎋</span> Cerrar sesión
-      </button>
-    </div>
-  </aside>
+  </div>
+  <div class="project-badge">
+    <div class="project-badge-label">Active Project</div>
+    <div class="project-badge-name">Chile · Brasil</div>
+    <div class="project-badge-status">3.874 menciones PT-BR</div>
+  </div>
+  <div style="margin:0 24px 24px;">
+    <button id="logoutBtn" style="width:100%;background:transparent;border:1px solid rgba(255,255,255,0.12);color:#B4B9C9;padding:9px 12px;border-radius:8px;font-size:12px;font-family:inherit;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:background 0.15s,border-color 0.15s;" onmouseover="this.style.background='rgba(239,68,68,0.08)';this.style.borderColor='rgba(239,68,68,0.3)';this.style.color='#F87171'" onmouseout="this.style.background='transparent';this.style.borderColor='rgba(255,255,255,0.12)';this.style.color='#B4B9C9'">
+      <span>⎋</span> Cerrar sesión
+    </button>
+  </div>
+</aside>
 
   <!-- MAIN -->
   <main class="main">
